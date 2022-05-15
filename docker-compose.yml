@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+
+  my-ubuntu1:
+    container_name: ubuntu1
+    image: example:v1.3
+    networks:
+      - backend
+    ports:
+      - "26257:26257"
+      - "8080:8080"
+    command: "ping my-ubuntu2 -c 3"
+    volumes:
+      - "${PWD}/app:/app"
+#    links:
+#      - ubutu2,ubuntu2
+
+  my-ubuntu2:
+    container_name: my-ubuntu2
+    image: example:v1.3
+    networks:
+      - backend
+    ports:
+      - "26258:26258"
+      - "8081:8081"
+    command: "ping my-ubuntu3 -c 3"
+    volumes:
+      - "${PWD}/app:/app"
+#    links:
+#      - ubuntu,ubuntu3
+
+  my-ubuntu3:
+    container_name: my-ubuntu3
+    image: example:v1.3
+    networks:
+      - backend
+    ports:
+      - "26259:26259"
+      - "8082:8082"
+    command: "ping my-ubuntu1 -c 3"
+    volumes:
+      - "${PWD}/app:/app"
+#    links:
+#      - ubuntu1,ubuntu2
+
+volumes:
+  myscripts:
+
+networks:
+  backend:
+    driver: bridge
